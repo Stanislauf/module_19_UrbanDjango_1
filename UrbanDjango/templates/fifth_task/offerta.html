@@ -1,0 +1,17 @@
+{% extends "menu.html" %}
+
+{% block pagename %}
+{{ title }}
+{% endblock %}
+
+{% block menu %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <ul style="list-style-type: none; padding: 0;">
+        {% for item in offerta %}
+            <li>{{ item }} <button style= "cursor: pointer"> Купить</button></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "menu.html" %}
+
+{% block pagename %}
+    <h1>Регистрация</h1>>
+{% endblock %}
+
+{% block menu %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.username.label_tag }} {{ form.username }}<br>
+        {{ form.password.label_tag }} {{ form.password }}<br>
+        {{ form.repeat_password.label_tag }} {{ form.repeat_password }}<br>
+        <div style="color: red;">{{ form.repeat_password.errors }}</div>
+        {{ form.age.label }} {{ form.age }}<br>
+
+        <button type="submit">Зарегистрироваться</button>
+
+        {% if error %}
+            <div style="color: red;">{{ error }}</div>
+        {% endif %}
+    </form>
+{% endblock %}
