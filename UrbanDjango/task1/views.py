@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from .models import Buyer, User, Game
 from django.views.generic import TemplateView
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -18,13 +18,10 @@ def index1(request):
     return render(request, "index.html", context)
 
 def offerta(request):
-    title = "Услуги"
-    offerta = ["Под ключ", "Просто для души", "Как для себя"]
-    context = {
-        "title": title,
-        "offerta": offerta
-    }
-    return render(request, "offerta.html", context)
+    title = "Список игр"
+    # Получаем все игры из базы данных
+    games = Game.objects.all()
+    return render(request, 'offerta.html', {'games': games, 'title': title})  # Передаем коллекцию игр в контекст
 
 def cart(request):
     title = "Корзина"
@@ -51,11 +48,15 @@ def sign_up_by_django(request):
             age = form.cleaned_data['age']
 
             # Проверяем условия
-            if password == repeat_password and age >= 18 and username not in existing_users:
-                return HttpResponse(f"Приветствуем, {username}!")  # Ответ при успешной регистрации
-            else:
-                if username in existing_users:
+            if password == repeat_password and age >= 18:
+                # Проверяем, существует ли покупатель с таким именем
+                if not Buyer.objects.filter(name=username).exists():
+                    # Создаем нового покупателя
+                    Buyer.objects.create(name=username, age=age)
+                    return HttpResponse(f"Приветствуем, {username}!")  # Ответ при успешной регистрации
+                else:
                     info['error'] = "Пользователь с таким именем уже существует."
+            else:
                 if age < 18:
                     info['error'] = "Вам должно быть не менее 18 лет."
                 if password != repeat_password:
@@ -66,5 +67,8 @@ def sign_up_by_django(request):
 
     info['form'] = form
     return render(request, 'registration_page.html', info)
+
+
+
 
 

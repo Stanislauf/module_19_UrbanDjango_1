@@ -9,9 +9,15 @@
 {% endblock %}
 
 {% block content %}
-    <ul style="list-style-type: none; padding: 0;">
-        {% for item in offerta %}
-            <li>{{ item }} <button style= "cursor: pointer"> Купить</button></li>
-        {% endfor %}
-    </ul>
+
+
+    {% for game in games %}
+        <div>
+            <p>{{ game.title }} | {{ game.description }}. Стоимость: {{ game.cost }} руб.</p>
+            <button style= "cursor: pointer">Купить</button>
+        </div>
+    {% empty %}
+        <p>Нет доступных игр.</p>
+    {% endfor %}
+
 {% endblock %}
